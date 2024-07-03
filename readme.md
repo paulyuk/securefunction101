@@ -41,7 +41,15 @@ Functions:
 
 ## Running locally using Entra ID identity and remote Azure resources
 
-1. Add or change the `local.settings.json` to the root of this folder and paste in these contents.  You will need to substitute values with your own resource values for storage and user assigned managed identity (the clientid).
+1. Create the Storage and Identity resources following the guidance above in [https://aka.ms/functions-secure101].  Alternatively you can create all the resources easily by performing the following in a new terminal window:
+
+```bash
+azd provision
+```
+
+All information about the resources created will persist to the `.azure/<env name>/global.env` file.
+
+2. Add or change the `local.settings.json` to the root of this folder and paste in these contents.  You will need to substitute values with your own resource values for storage and user assigned managed identity (the clientid) from step 1.
 
 ```json
 {
@@ -59,7 +67,7 @@ Functions:
   }
 }
 ```
-2.  Start and run the function with either `F5` in Visual Studio or the following command in a new terminal window:
+3.  Start and run the function with either `F5` in Visual Studio or the following command in a new terminal window:
 
 ```bash
 func start
@@ -74,3 +82,17 @@ Functions:
 
         BlobTrigger1: blobTrigger
 ```
+
+## Deploying to Azure
+
+This step will deploy the function app, storage account, and user-assigned managed identity to Azure.  The configuration is the same as the previous step, except it is handled in the App Settings of the FunctionApp resource.  AZD tool does this work on your behalf leveraging the bicep files in the /infra folder.
+
+1. Deploy the app
+
+```bash
+azd up
+```
+
+2. Inspect the App Settings of the FunctionApp Resource, and the logs in app insights.
+
+
